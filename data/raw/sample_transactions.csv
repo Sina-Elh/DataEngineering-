@@ -1,0 +1,11 @@
+Transaction_ID,Transaction_date,Gender,Age,Marital_status,State_names,Segment,Employees_status,Payment_method,Referral,Amount_spent
+1000,2018-01-01T00:04:00.000000,Female,39,Single,Oklahoma,Platinum,Unemployment,Card,0,1557.5
+1001,2018-01-01T00:06:00.000000,Male,34,Married,Hawaii,Basic,workers,PayPal,1,153.55
+1002,2018-01-01T00:14:00.000000,Female,53,Married,Iowa,Basic,self-employed,PayPal,1,2640.96
+1003,2018-01-01T00:21:00.000000,Male,48,Single,California,Silver,workers,Card,0,753.22
+1004,2018-01-01T00:35:00.000000,Female,27,Married,Texas,Gold,self-employed,Cash,1,2112.39
+1005,2018-01-01T00:40:00.000000,Male,44,Single,Florida,Platinum,workers,Card,0,1871.05
+1006,2018-02-02T05:05:00.000000,Female,31,Married,New York,Basic,workers,PayPal,1,920.55
+1007,2018-02-09T12:20:00.000000,Male,58,Single,Ohio,Silver,Unemployment,Card,0,421.76
+1008,2018-03-10T17:45:00.000000,Female,36,Married,Arizona,Gold,self-employed,Cash,1,1304.8
+1009,2018-03-11T19:11:00.000000,Male,23,Single,Georgia,Basic,workers,PayPal,0,282.43

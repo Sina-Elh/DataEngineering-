@@ -1,0 +1,56 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: ecommerce_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-ecommerce_db}
+      POSTGRES_USER: ${POSTGRES_USER:-de_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-de_password}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-de_user} -d ${POSTGRES_DB:-ecommerce_db}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  ingestion:
+    build: .
+    container_name: ecommerce_ingestion_service
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      POSTGRES_DB: ${POSTGRES_DB:-ecommerce_db}
+      POSTGRES_USER: ${POSTGRES_USER:-de_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-de_password}
+      DATA_FILE: /app/data/raw/transactions.csv
+    volumes:
+      - ./data:/app/data
+    command: ["python", "-m", "scripts.ingest"]
+
+  processing:
+    build: .
+    container_name: ecommerce_processing_service
+    depends_on:
+      ingestion:
+        condition: service_completed_successfully
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      POSTGRES_DB: ${POSTGRES_DB:-ecommerce_db}
+      POSTGRES_USER: ${POSTGRES_USER:-de_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-de_password}
+      ML_MAX_ROWS: ${ML_MAX_ROWS:-100000}
+    volumes:
+      - ./data:/app/data
+      - ./models:/app/models
+    command: ["python", "-m", "scripts.process"]
+
+volumes:
+  postgres_data:
